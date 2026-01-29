@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rule_engine"
-version = "0.2.0"
+version = "0.2.1"
 description = "Async, context-aware, modular RuleEngine for Python"
 readme = "README.md"
 requires-python = ">=3.11"
-authors = [{ name = "Your Name" }]
+authors = [{ name = "i-iz-adam" }]
 dependencies = []
 
 [project.optional-dependencies]

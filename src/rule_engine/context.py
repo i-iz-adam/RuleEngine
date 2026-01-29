@@ -1,20 +1,33 @@
-from collections import defaultdict
-from typing import Any, Dict
+from __future__ import annotations
 
-class ContextStore:
-    """Stores state across events for rules."""
+from collections.abc import MutableMapping
+from typing import Any
 
-    def __init__(self):
-        # {scope: {key: value}}
-        self._store: Dict[str, Dict[Any, Any]] = defaultdict(dict)
 
-    def set(self, scope: str, key: Any, value: Any) -> None:
-        self._store[scope][key] = value
+class ContextStore(MutableMapping[str, Any]):
+    """
+    Mutable key-value store shared across rules during execution.
 
-    def get(self, scope: str, key: Any, default: Any = None) -> Any:
-        return self._store[scope].get(key, default)
+    This represents system state, not the event itself.
+    """
 
-    def increment(self, scope: str, key: Any, field: str, amount: int = 1) -> int:
-        obj = self._store[scope].setdefault(key, {})
-        obj[field] = obj.get(field, 0) + amount
-        return obj[field]
+    def __init__(self) -> None:
+        self._data: dict[str, Any] = {}
+
+    def __getitem__(self, key: str) -> Any:
+        return self._data[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self._data[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self._data[key]
+
+    def __iter__(self):
+        return iter(self._data)
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def clear(self) -> None:
+        self._data.clear()
